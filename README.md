@@ -7,12 +7,12 @@ Web上の情報を効率的に収集し，エージェントによる自律的�
 この検索システムは，ひとつのオーケストレーターと複数の検索エージェントから構成されます．オーケストレーターは検索の計画や検索エージェントへの指示を担当し，検索エージェントは実際のWeb検索や情報収集を行います．各エージェントは独立して並列に動作することで，効率的な情報収集を可能にします．
 
 ### システム構成
-- `n8n`: ワークフロー自動化ツール．オーケストレーターとエージェントのワークフローを管理．
-- `searxng`: 複数のソースから情報を収集するメタ検索エンジン．
-- `JINA API`: webページからの情報抽出を行うAPI.
+- `n8n`: ワークフロー自動化ツール．オーケストレーターとエージェントのワークフローを管理．(https://github.com/n8n-io/n8n)
+- `searxng`: 複数のソースから情報を収集するメタ検索エンジン．(https://github.com/searxng/searxng/tree/master)
+- `JINA API`: webページからの情報抽出を行うAPI．(https://jina.ai/)
 - 各種MCP
-    - `playwright MCP`: Webページの動的コンテンツ取得に使用．
-    - `GitHub MCP`: GitHubリポジトリの情報収集に使用．
+    - `playwright MCP`: Webページの動的コンテンツ取得に使用．(https://github.com/microsoft/playwright-mcp)
+    - `GitHub MCP`: GitHubリポジトリの情報収集に使用．(https://github.com/github/github-mcp-server)
 
 ## Setup
 1. セキュリティーキーの設定
