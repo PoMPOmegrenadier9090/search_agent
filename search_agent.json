@@ -1,0 +1,920 @@
+{
+  "name": "pseudo_perplexity/search_agent",
+  "nodes": [
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "maxOutputTokens": 200000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        608,
+        288
+      ],
+      "id": "1a257f5d-115d-4250-ba83-daa0708c8c5c",
+      "name": "Google Gemini Chat Model",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HlFrnxXLncixOykq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to get search result from the internet.",
+        "workflowId": {
+          "__rl": true,
+          "value": "4bjiaSNplMWyHAD5",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/4bjiaSNplMWyHAD5",
+          "cachedResultName": "searxng_search"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "query_word": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('query_word', ``, 'string') }}",
+            "pageno": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('pageno', `Search page number. \nOn the first attempt, this should be set to 1.\nOn the second attempt, this should be set to 2. And so on.`, 'string') }}",
+            "language": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('language', `Search language. The valid parameters are 'en'(English) and 'jp'(japanese).`, 'string') }}",
+            "category": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('category', `Searching category. This should be set in order to get category-specific results.\n\n## valid categories\n- general\n- books\n- images\n- videos\n- news\n- map\n- music\n- it: Information Technology\n- repos: software repositories (e.g. github and huggingface)\n- science\n- files\n- social_media`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "query_word",
+              "displayName": "query_word",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "pageno",
+              "displayName": "pageno",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        288
+      ],
+      "id": "fdefc3df-c49b-4c53-b9ed-0ceab5331dbd",
+      "name": "Web_Search_Tool"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        736,
+        288
+      ],
+      "id": "1591b144-536b-4ea8-9644-6d9c2d70c876",
+      "name": "OpenAI Chat Model",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "openAiApi": {
+          "id": "OrXljhe7n8onPlDv",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://playwright-mcp:8931/mcp",
+        "include": "selected",
+        "includeTools": [
+          "browser_navigate",
+          "browser_snapshot",
+          "browser_click",
+          "browser_drag",
+          "browser_select_option",
+          "browser_hover"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        288
+      ],
+      "id": "97f8f774-393b-4398-9b60-adceb0316b97",
+      "name": "Playwright_MCP"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://mcp.jina.ai/v1",
+        "authentication": "bearerAuth",
+        "include": "selected",
+        "includeTools": [
+          "read_url"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        1248,
+        528
+      ],
+      "id": "513dfc9c-1dce-424f-afe7-b5795c17ff5e",
+      "name": "JINA_MCP",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "SXolwDe5QzfdMuha",
+          "name": "JINA_API_TOKEN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://api.githubcopilot.com/mcp/",
+        "authentication": "bearerAuth",
+        "include": "selected",
+        "includeTools": [
+          "get_file_contents",
+          "search_code",
+          "search_repositories",
+          "search_users"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        1376,
+        288
+      ],
+      "id": "c129b429-233f-4e21-96e2-441c45e05edc",
+      "name": "GitHub_MCP",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "R9XBY0cvBdVSwvOa",
+          "name": "GITHUB_PAT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "search_topic"
+            },
+            {
+              "name": "user_query"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "10ceddc9-64a5-4257-9a9f-4c435849785e",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- search_topic\n{{ $json.search_topic }}\n---\n- search_goal\n{{ $json.search_goal }}\n\n- user_query\n{{ $json.user_query }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=### Datetime\n{{ $now.format('yyyy-MM-dd') }}\n### Role\nYour objective is to conduct a web search based on the provided search queries, extract the necessary information, and report your findings. You must answer based ONLY on the information obtained through your tools; do not rely on your internal knowledge or provide speculative answers.\n\n### Operational Process (Chain of Thought)\nFollow these steps strictly to perform your task:\n\n#### Step 1: Execute Search (Search)\nRead `search_goal` and understand the purpose of this search process. Then, Use the provided `search_query` to run the `Web_Search_Tool`.\n\n#### Step 2: Evaluate and Filter Results (Filter)\nCarefully read the snippets (summaries) from the search results and evaluate them based on the following criteria:\n- **Relevancy:** Does it likely contain a direct answer to the user's question (`user_query`)?\n- **Credibility:** Is the domain trustworthy (e.g., official sites, technical documentation, academic papers, major media outlets)?\n- **Freshness:** Is the information up-to-date and not obsolete?\n\nBased on your evaluation, select **up to 3 pages** that require a detailed review.\n\n#### Step 3: Retrieve Detailed Information (Read)\nExecute the appropriate tools for the selected URLs to retrieve the page content:\n- **JINA_MCP (`read_url` tool):** Use this tool as your top priority to retrieve web page details.\n- **GitHub_MCP:** Use this only to retrieve software details regarding GitHub repositories or codebases.\n- **Playwright_MCP:** Use this for web page interactions. Only use this if you determine that specific actions (e.g., clicking, navigating dynamic elements) are required to retrieve the information.\n\nIf a tool returns an error (e.g., 403 Forbidden or getting null), skip that URL and try the next candidate.\n\n#### Step 4: Synthesize the Response (Synthesize)\nIntegrate the investigation results (search snippets and page content) and generate a response in the following format:\n\n---\n**Summary of Results:**\n(Provide a concise and specific summary of your findings based on the collected information.)\n\n**Detailed Information:**\n- (Important Fact 1) [Source: 1]\n- (Important Fact 2) [Source: 2]\n\n**References:**\n1. Page Title (URL)\n2. Page Title (URL)\n---\n\n### Strict Prohibitions\n- **No Internal Knowledge:** Do not answer using your own knowledge without using tools.\n- **No Filler Text:** Do not include greetings, acknowledgments, or conversational filler unrelated to the investigation results.\n- **No Hallucinations:** Do not fabricate URLs or information.",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        960,
+        64
+      ],
+      "id": "2f71840c-a01f-40db-bbaa-b7abe2e3cbf7",
+      "name": "検索エージェント",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"result_overview\": {\n      \"type\": \"string\"\n    },\n    \"result_details\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"sources\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n          \"properties\": {\n            \"title\": {\n              \"type\": \"string\"\n            },\n            \"url\": {\n              \"type\": \"string\"\n            }\n          }\n      }\n    }\n  }\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1504,
+        288
+      ],
+      "id": "a7785b99-d113-45ee-b56c-8de6dc6a724e",
+      "name": "Structured Output Parser",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        464
+      ],
+      "id": "b9061414-7af3-489a-95b9-d6623c043a19",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HlFrnxXLncixOykq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a839d203-3491-4ee5-9d78-325e98e9db26",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "8374fb4e-c155-4810-a685-46791972aa77",
+      "name": "Webhook",
+      "webhookId": "a839d203-3491-4ee5-9d78-325e98e9db26"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2873156-10e9-489c-92e1-7f2238169636",
+              "name": "search_topic",
+              "value": "={{ $('Webhook').item.json.body.search_topic }}",
+              "type": "string"
+            },
+            {
+              "id": "59bbeee2-18db-4952-be85-e15e42cd25e8",
+              "name": "search_goal",
+              "value": "={{ $('Webhook').item.json.body.search_goal }}",
+              "type": "string"
+            },
+            {
+              "id": "848a084c-dc0e-4bef-b50f-d452cfb7be2b",
+              "name": "body.user_query",
+              "value": "={{ $('Webhook').item.json.body.user_query }}",
+              "type": "string"
+            },
+            {
+              "id": "552f06d9-8e6b-4cc4-9c2a-9dd56bdb7324",
+              "name": "shared_db_id",
+              "value": "={{ $('Webhook').item.json.body.shared_db_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        -128
+      ],
+      "id": "e5269dbd-2423-42ff-bdd1-11d376429cf1",
+      "name": "Edit Fields",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "leNl21nJPwp9VYcT",
+          "mode": "list",
+          "cachedResultName": "search_agent_system_DB",
+          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "subAgentID": "={{ $execution.id }}",
+            "status": "started"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "subAgentID",
+              "displayName": "subAgentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "searchResult",
+              "displayName": "searchResult",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": true
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -128
+      ],
+      "id": "a16c0b01-edf4-4e5e-81ee-ba30f13a5636",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "leNl21nJPwp9VYcT",
+          "mode": "list",
+          "cachedResultName": "search_agent_system_DB",
+          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "subAgentID",
+              "keyValue": "={{ $execution.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "failed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "subAgentID",
+              "displayName": "subAgentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "searchResult",
+              "displayName": "searchResult",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1536,
+        96
+      ],
+      "id": "b7ae5ab0-d77f-42f8-a4e3-279ea131b0f6",
+      "name": "error_fallback"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "leNl21nJPwp9VYcT",
+          "mode": "list",
+          "cachedResultName": "search_agent_system_DB",
+          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "subAgentID",
+              "keyValue": "={{ $execution.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "failed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "subAgentID",
+              "displayName": "subAgentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "searchResult",
+              "displayName": "searchResult",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        928,
+        -112
+      ],
+      "id": "02acf78e-3596-426d-88a1-315bed57f073",
+      "name": "error_fallback1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "leNl21nJPwp9VYcT",
+          "mode": "list",
+          "cachedResultName": "search_agent_system_DB",
+          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "subAgentID",
+              "keyValue": "={{ $execution.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "success",
+            "searchResult": "={{ $json.output.toJsonString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "subAgentID",
+              "displayName": "subAgentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "searchResult",
+              "displayName": "searchResult",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1536,
+        -32
+      ],
+      "id": "c8e72412-172d-4a52-b37a-8a7433fed0a8",
+      "name": "success"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "leNl21nJPwp9VYcT",
+          "mode": "list",
+          "cachedResultName": "search_agent_system_DB",
+          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "subAgentID": "={{ $execution.id }}",
+            "status": "started"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "subAgentID",
+              "displayName": "subAgentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "searchResult",
+              "displayName": "searchResult",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": true
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        80
+      ],
+      "id": "c4e29861-3fee-4dbc-a7e2-eda580409cb0",
+      "name": "Insert row1"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to get the detailed content of the web page. ",
+        "workflowId": {
+          "__rl": true,
+          "value": "KeGzJFfQTDEe2LibtM2YB",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/KeGzJFfQTDEe2LibtM2YB",
+          "cachedResultName": "pseudo_perplexity/JINA_API_with_shared_DB"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', `The full URL of the web page to be searched(e.g. https://example.com).`, 'string') }}"
+          },
+          "matchingColumns": [
+            "url"
+          ],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        288
+      ],
+      "id": "adf0237c-d705-44ec-af0b-8cc42e4732c7",
+      "name": "JINA_API"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "search_topic": "藤井風　コンサート",
+          "user_query": "藤井風の最新情報を教えて"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web_Search_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Playwright_MCP": {
+      "ai_tool": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JINA_MCP": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "GitHub_MCP": {
+      "ai_tool": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Insert row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "検索エージェント": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "error_fallback1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "success": {
+      "main": [
+        []
+      ]
+    },
+    "Insert row1": {
+      "main": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JINA_API": {
+      "ai_tool": [
+        [
+          {
+            "node": "検索エージェント",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "632d69b6-3d34-4fd6-8b67-4241d1999f0f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e25741df68988bb75a94158f0c4bf529d1eac884d9960bdad684f0118a561771"
+  },
+  "id": "kQwxUw6feRGxZOTr8EGK3",
+  "tags": []
+}

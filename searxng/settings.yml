@@ -1,0 +1,47 @@
+# https://docs.searxng.org/admin/settings/settings.html#settings-yml-location
+# searxng/settings.yml
+use_default_settings: true
+
+server:
+  # サーバーが許可するフォーマット
+  # セキュリティキー（適当な長い文字列に変更してください）
+  secret_key: 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+
+search:
+  safe_search: 0 # 0: Off, 1: Moderate, 2: Strict
+  autocomplete: ""
+  formats:
+    - html
+    - json
+# 使用する検索エンジンの設定（必要に応じて追加）
+# refer to: https://github.com/searxng/searxng/blob/master/searx/settings.yml
+engines:
+  - name: google
+    engine: google
+    shortcut: go
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+  - name: github
+    engine: github
+    shortcut: gh
+    disabled: false
+  - name: huggingface
+    engine: huggingface
+    shortcut: hf
+    disabled: false
+  - name: semantic scholar
+    engine: semantic_scholar
+    shortcut: se
+    disabled: false
+  - name: google scholar
+    engine: google_scholar
+    shortcut: gos
+    disabled: false
+  - name: arxiv
+    engine: arxiv
+    shortcut: arx
+outgoing:
+   request_timeout: 20.0
+   max_request_timeout: 20.0
+   pool_maxsize: 100

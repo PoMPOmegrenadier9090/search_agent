@@ -1,0 +1,246 @@
+{
+  "name": "pseudo_perplexity/JINA_API_with_shared_DB",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "url"
+            },
+            {
+              "name": "shared_db_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -112
+      ],
+      "id": "dae56ff4-770b-4ca1-b318-6a8ecd4a3e61",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $('Insert row').item.json.search_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Token-Budget",
+              "value": "200000"
+            },
+            {
+              "name": "X-Return-Format",
+              "value": "markdown"
+            },
+            {
+              "name": "X-Retain-Images",
+              "value": "none"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        384,
+        -16
+      ],
+      "id": "9c291930-1033-424b-a371-5c3bd33147d2",
+      "name": "HTTP Request",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "SXolwDe5QzfdMuha",
+          "name": "JINA_API_TOKEN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $json.shared_db_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "search_url",
+              "keyValue": "={{ $json.url.trim() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "e94f15e0-c14b-4c86-9b54-df7e84388b72",
+      "name": "If row does not exist",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.shared_db_id }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        -16
+      ],
+      "id": "7ce5a394-fa35-46c6-9b5e-8fb747ee79f6",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "rowExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $json.shared_db_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "search_url",
+              "keyValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -64,
+        -208
+      ],
+      "id": "8f486f27-fe1c-4370-b3f6-b8e18113db4f",
+      "name": "If row exists"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa479b0b-b55d-4941-9b12-fee425a3c0bf",
+              "name": "error_message",
+              "value": "The URL has already been searched by other agents. Try searching other URLs.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -208
+      ],
+      "id": "fe2c08ab-d13f-448a-865c-938649039286",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "url": "https://example.com",
+          "shared_db_id": "asadfa"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "If row does not exist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If row exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If row does not exist": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If row exists": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "db707dd4-5842-4399-b990-cdbca964c83d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e25741df68988bb75a94158f0c4bf529d1eac884d9960bdad684f0118a561771"
+  },
+  "id": "KeGzJFfQTDEe2LibtM2YB",
+  "tags": []
+}

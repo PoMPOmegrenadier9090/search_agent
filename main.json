@@ -1,0 +1,389 @@
+{
+  "name": "pseudo_perplexity/main",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "こんにちは，perplexityもどきです．",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "edb62e8e-783d-4d81-b396-e41e0fb1bfe4",
+      "name": "When chat message received",
+      "webhookId": "f06ea64a-441f-4b42-ba3f-2a74dcb30e36"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=# Role\nYou are a \"Research Orchestrator\" who directs multiple expert agents to create comprehensive answers to user questions.\n\n# Workflow\nThink through the following 4 steps in order and decide on an action.\n\n## Step 1: Clarification of User Intent\nAnalyze the user's input question and define the \"Core Question\" that the user truly wants to know.\n- If the question is ambiguous, complement and specify the most likely intent.\n- The intent defined here will be the criterion for subsequent judgments.\n\n## Step 2: Sufficiency Check of Information\nCheck the text currently provided as input (e.g., previous research results).\n\n1. **Internal Knowledge Check:**\n   - If the question can be answered only with general knowledge or conceptual explanations (e.g., \"What is Python?\"), no search is necessary.\n   - **Important:** If the question requires current events, statistical data, specific product specifications, or factual verification, do not use your internal knowledge and always determine that \"a search is necessary.\"\n\n2. **Evaluation of Research Results:**\n   - If research results exist, evaluate whether they are sufficient to fulfill the intent defined in Step 1.\n\n## Step 3: Decision\nBased on the evaluation in Step 2, choose one of the following:\n\n- **Action: \"research\"** (if information is insufficient or unresearched)\n  - Create a research plan to collect the necessary information.\n- **Action: \"answer\"** (if information is sufficient)\n  - Integrate the research results and create an answer.\n\n## Step 4: Output Generation\n### A. When conducting research (Action: \"research\")\n1. Create instructions for sub-agents. Devise topics to be researched and create keywords (`search_queries`) and their objectives (`search_goals`) for researching these topics. These lists must have a one-to-one correspondence between keywords and objectives.\n2. Execute the research using `search_agent_manager`.\n\n### B. When providing an answer (Action: \"answer\")\nCreate a concise and comprehensive answer to the intent from Step 1.\n\n## Constraints\n- Do not output any text other than JSON (greetings or thought dumps).\n- `search_goals` should be described specifically so that sub-agents know \"what to read.\"\n- The length of `search_goals` and `search_queries` must always be the same.\n- The answer to the user should be concise while covering important aspects of the research results.\n- Always display a list of references at the end of the answer. (e.g. [1]Sample Page 1(example.com), [2]Sample Page 2(example2.com))\n\n---\nDatetime: {{ $now.format('yyyy-MM-dd-HH') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "8b907f72-71bc-46fe-8c49-6958c00ae50b",
+      "name": "research_orchestrator"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        448,
+        224
+      ],
+      "id": "beac02f7-f4ad-4fbe-bfc5-0e16389d69eb",
+      "name": "Google Gemini Chat Model",
+      "retryOnFail": true,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HlFrnxXLncixOykq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        224
+      ],
+      "id": "09ed067c-5987-466a-8bcb-99323734ba8b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "OrXljhe7n8onPlDv",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        688,
+        224
+      ],
+      "id": "f91c4b7c-6ab9-4c9a-916a-73a966b3fb6f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "operation": "delete",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('create_shared_DB').item.json.id }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        992,
+        -192
+      ],
+      "id": "6df96d39-808a-46ac-bef6-cf4e99400031",
+      "name": "Delete a data table"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "=pseudo_perplexity_shared_DB_{{ $now.format('yyyyMMddHHmmssS') }}",
+        "columns": {
+          "column": [
+            {
+              "name": "search_url"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        0
+      ],
+      "id": "691008c9-6e86-4ca6-9240-55aca519f8c7",
+      "name": "create_shared_DB"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool for conduct a comperhensive research on multiple topics.",
+        "workflowId": {
+          "__rl": true,
+          "value": "aj1sCyZiGPdnk4-c8NjuB",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_query": "={{ $('When chat message received').item.json.chatInput }}",
+            "search_goals": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('search_goals', \"searching goal of each `search_query`\", 'json') }}",
+            "search_queries": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('search_queries', `search keyword`, 'json') }}",
+            "shared_db_id": "={{ $('create_shared_DB').item.json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "search_goals",
+              "displayName": "search_goals",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "search_queries",
+              "displayName": "search_queries",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "user_query",
+              "displayName": "user_query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "shared_db_id",
+              "displayName": "shared_db_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        288
+      ],
+      "id": "cfe737ae-7b01-48fd-83d8-363142b542ed",
+      "name": "search_agent_manager"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cdcf43d3-f80a-4b35-b347-dca9ca82028e",
+              "name": "response",
+              "value": "={{ $('research_orchestrator').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        176
+      ],
+      "id": "3dafc014-73cd-47c0-b770-be919516d86d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"action\": \"answer\",\n\t\"answer\": \"This is the research result\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        944,
+        320
+      ],
+      "id": "744c6460-ccc7-4c2e-b427-29eb42c84bbf",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7cc176cf-80e1-4a95-b404-11a7e5c55c3a",
+              "name": "output",
+              "value": "={{ $json.output.answer }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        0
+      ],
+      "id": "4d31505d-fd59-4a6a-9e87-7df322a05276",
+      "name": "Edit Fields1",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "create_shared_DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "research_orchestrator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "research_orchestrator",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "research_orchestrator",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "research_orchestrator": {
+      "main": [
+        [
+          {
+            "node": "Delete a data table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_shared_DB": {
+      "main": [
+        [
+          {
+            "node": "research_orchestrator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_agent_manager": {
+      "ai_tool": [
+        [
+          {
+            "node": "research_orchestrator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "research_orchestrator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "46ff1d2b-5bba-488a-bf6b-2ea17abcf934",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e25741df68988bb75a94158f0c4bf529d1eac884d9960bdad684f0118a561771"
+  },
+  "id": "FdB706BkKCRxFnxD5iGLv",
+  "tags": []
+}

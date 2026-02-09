@@ -1,0 +1,72 @@
+services:
+  # n8n
+  n8n:
+    image: n8nio/n8n:latest # 最新版のn8nイメージを指定
+    container_name: n8n_local # コンテナ名を指定 (任意)
+    restart: unless-stopped # コンテナが停止した場合、手動で停止しない限り再起動
+    ports:
+      - "5678:5678" # ホストOSの5678番ポートをコンテナの5678番ポートに接続
+    environment:
+      # 重要: ワークフローの認証情報などを暗号化するためのキー
+      # 下記のコマンドで生成したランダムな文字列を設定してください
+      - N8N_ENCRYPTION_KEY=1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+      # タイムゾーンを日本時間に設定
+      - GENERIC_TIMEZONE=Asia/Tokyo
+      - EXECUTIONS_TIMEOUT=3600   # seconds, example: 1 hour
+      - EXECUTIONS_TIMEOUT_MAX=7200  # max per‑workflow timeout users can set
+      - NODE_FUNCTION_ALLOW_EXTERNAL=node-fetch # code nodeにてfetchを使用可能にする
+    volumes:
+      # n8nの設定データやワークフローデータを永続化するためのボリューム
+      - ./n8n_data:/home/node/.n8n
+      # searxngが起動してからn8nを起動するように指定
+    depends_on:
+      - searxng
+  # SearXNG
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    volumes:
+      # 先ほど作成した設定ファイルをマウント
+      - ./searxng:/etc/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8080/
+      - SEARXNG_UWSGI_WORKERS=4
+      - SEARXNG_UWSGI_THREADS=4
+      - GRANIAN_BLOCKING_THREADS=4
+      - GRANIAN_WORKERS=5
+    ports:
+      - "127.0.0.1:8080:8080"
+  # playwright mcp
+  playwright-mcp:
+    image: mcr.microsoft.com/playwright/mcp
+    container_name: playwright-mcp
+    # volumes:
+    #   - ./path/to/your/config.json:/app/config.json:ro
+    restart: unless-stopped
+    # --init に相当：ゾンビプロセスを防止し、ブラウザを安全に終了させる
+    init: true
+    # -i (interactive) に相当：標準入力を開いたままにする
+    stdin_open: true
+    # --entrypoint node に相当
+    # 2. npxコマンドの引数に対応する部分を記述
+    entrypoint: ["node"]
+    command: 
+      - "cli.js"
+      - "--port"
+      - "8931"
+      - "--headless" # cli.js 以降の引数に相当
+      - "--browser"
+      - "chromium"
+      - "--no-sandbox"
+      - "--host"
+      - "0.0.0.0"
+      - "--allowed-hosts"
+      - "*"
+    ports:
+      - "8931:8931"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: 4000M

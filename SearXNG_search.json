@@ -1,0 +1,196 @@
+{
+  "name": "searxng_search",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://searxng:8080/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.query_word }}"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "language",
+              "value": "={{ $json.language }}"
+            },
+            {
+              "name": "pageno",
+              "value": "={{ $json.pageno }}"
+            },
+            {
+              "name": "categories",
+              "value": "={{ $json.category }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        736,
+        -336
+      ],
+      "id": "f8ef4d4a-8bdb-47c0-b2fd-ec2cecd9e97c",
+      "name": "SearXNG_search",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  const enginesArray = item.json.engines_array\n  const enginesStr = enginesArray?.join(\",\")\n  item.json.engines = enginesStr?enginesStr:\"\";\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -144
+      ],
+      "id": "72c3c5b7-615a-4e40-b0e1-041c26d280fb",
+      "name": "Array_to_CSText",
+      "executeOnce": false,
+      "notes": "配列をカンマ区切り文字に変換．"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.all()[0].json;\nconst results = inputData.results || [];\n\nconst formattedText = results.map((item, index) => {\n  const id = index + 1;\n  const title = item.title || 'No Title';\n  const url = item.url || 'No URL';\n  const content = (item.content || 'No description available.').replace(/\\n/g, ' ');\n  \n  // --- メタデータの動的構成 ---\n  let metadata = [];\n  \n  // 著者情報がある場合（論文など）\n  if (item.authors && item.authors.length > 0) {\n    metadata.push(`Authors: ${item.authors.slice(0, 3).join(',')}${item.authors.length > 3 ? ' et al.' : ''}`);\n  } else if (item.author) {\n    metadata.push(`Author:${item.author}`)\n  }\n  \n  // 出版日・日付がある場合\n  const articleDate = item.publishedDate || item.pubdate || null;\n  \n  if (articleDate) {\n    metadata.push(`Date: ${item.publishedDate.substring(0, 10)}`);\n  }\n\n  if (item.doi) {\n  metadata.push(`DOI:${item.doi}`);\n  }\n\n  const metaString = metadata.length > 0 ? `(${metadata.join(' | ')})` : '';\n\n  // --- フォーマット組み立て ---\n  // [ID] タイトル (メタ情報)\n  // URL: ...\n  // Content: ...\n  return `[${id}] ${title} ${metaString}\\nURL: ${url}\\nContent: ${content}`;\n\n}).join('\\n\\n---\\n\\n'); // 区切り線を入れて視認性を高める\n\nreturn {\n  json: {\n    search_context: formattedText,\n    count: results.length\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        -336
+      ],
+      "id": "555cb89e-382c-47b4-a83c-d608764e92a1",
+      "name": "SearchResult_to_MD"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "33901763-dc22-406e-8d17-b04f3be64d76",
+              "name": "search_context",
+              "value": "={{ $json.search_context }}",
+              "type": "string"
+            },
+            {
+              "id": "98754f50-fd72-42ac-94b7-190ddb138e0b",
+              "name": "count",
+              "value": "={{ $json.count }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1184,
+        -336
+      ],
+      "id": "96a837f3-583d-42bb-9b65-1341d03f0a9a",
+      "name": "Edit Fields",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "query_word"
+            },
+            {
+              "name": "pageno"
+            },
+            {
+              "name": "language"
+            },
+            {
+              "name": "category"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -336
+      ],
+      "id": "031bce83-3ab4-4663-83f4-a17a943af447",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query_word": "https://github.com/ryoppippi/ccusage/blob/main/apps/ccusage/scripts/generate-json-schema.ts",
+          "pageno": 1,
+          "language": "en",
+          "category": "repos"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "SearXNG_search": {
+      "main": [
+        [
+          {
+            "node": "SearchResult_to_MD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Array_to_CSText": {
+      "main": [
+        []
+      ]
+    },
+    "SearchResult_to_MD": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "SearXNG_search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "651e1c4e-abd7-4e39-85ff-5bdc80199454",
+  "meta": {
+    "instanceId": "e25741df68988bb75a94158f0c4bf529d1eac884d9960bdad684f0118a561771"
+  },
+  "id": "4bjiaSNplMWyHAD5",
+  "tags": []
+}
