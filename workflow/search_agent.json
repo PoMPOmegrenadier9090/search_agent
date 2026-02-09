@@ -345,70 +345,6 @@
     },
     {
       "parameters": {
-        "dataTableId": {
-          "__rl": true,
-          "value": "leNl21nJPwp9VYcT",
-          "mode": "list",
-          "cachedResultName": "search_agent_system_DB",
-          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "subAgentID": "={{ $execution.id }}",
-            "status": "started"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "subAgentID",
-              "displayName": "subAgentID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "searchResult",
-              "displayName": "searchResult",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {
-          "optimizeBulk": true
-        }
-      },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1.1,
-      "position": [
-        208,
-        -128
-      ],
-      "id": "a16c0b01-edf4-4e5e-81ee-ba30f13a5636",
-      "name": "Insert row"
-    },
-    {
-      "parameters": {
         "operation": "update",
         "dataTableId": {
           "__rl": true,
@@ -620,70 +556,6 @@
     },
     {
       "parameters": {
-        "dataTableId": {
-          "__rl": true,
-          "value": "leNl21nJPwp9VYcT",
-          "mode": "list",
-          "cachedResultName": "search_agent_system_DB",
-          "cachedResultUrl": "/projects/BPx7JLyV9giVu6dv/datatables/leNl21nJPwp9VYcT"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "subAgentID": "={{ $execution.id }}",
-            "status": "started"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "subAgentID",
-              "displayName": "subAgentID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "searchResult",
-              "displayName": "searchResult",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {
-          "optimizeBulk": true
-        }
-      },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1.1,
-      "position": [
-        448,
-        80
-      ],
-      "id": "c4e29861-3fee-4dbc-a7e2-eda580409cb0",
-      "name": "Insert row1"
-    },
-    {
-      "parameters": {
         "description": "Call this tool to get the detailed content of the web page. ",
         "workflowId": {
           "__rl": true,
@@ -801,7 +673,7 @@
       "main": [
         [
           {
-            "node": "Insert row1",
+            "node": "検索エージェント",
             "type": "main",
             "index": 0
           }
@@ -840,7 +712,7 @@
       "main": [
         [
           {
-            "node": "Insert row",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -865,31 +737,9 @@
         ]
       ]
     },
-    "Insert row": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "success": {
       "main": [
         []
-      ]
-    },
-    "Insert row1": {
-      "main": [
-        [
-          {
-            "node": "検索エージェント",
-            "type": "main",
-            "index": 0
-          }
-        ]
       ]
     },
     "JINA_API": {
@@ -910,7 +760,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "632d69b6-3d34-4fd6-8b67-4241d1999f0f",
+  "versionId": "4a9faa10-662c-4a61-a495-e1d5ecf2a8b7",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e25741df68988bb75a94158f0c4bf529d1eac884d9960bdad684f0118a561771"
