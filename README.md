@@ -14,6 +14,9 @@ Web上の情報を効率的に収集し，エージェントによる自律的�
     - `playwright MCP`: Webページの動的コンテンツ取得に使用．(https://github.com/microsoft/playwright-mcp)
     - `GitHub MCP`: GitHubリポジトリの情報収集に使用．(https://github.com/github/github-mcp-server)
 
+### ワークフロー
+![workflow_figure](figure/agent_flow.png)
+
 ## Setup
 1. セキュリティーキーの設定
     以下の箇所に，ランダムな文字列を設定してください．
