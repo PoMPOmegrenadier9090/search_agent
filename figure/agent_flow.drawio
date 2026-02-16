@@ -1,0 +1,224 @@
+<mxfile host="65bd71144e">
+    <diagram name="Pseudo Perplexity - Workflow Overview" id="workflow-overview">
+        <mxGraphModel dx="1605" dy="1480" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="main-group" value="main" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;arcSize=8;fontSize=14;fontStyle=1;swimlaneLine=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="880" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-chat-trigger" value="&lt;b&gt;チャット開始&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="main-group" vertex="1">
+                    <mxGeometry x="30" y="60" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-create-db" value="&lt;b&gt;共有メモリ作成&lt;/b&gt;&lt;br&gt;(DataTable: create)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="main-group" vertex="1">
+                    <mxGeometry x="220" y="60" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-orchestrator" value="&lt;b&gt;オーケストレーター&lt;/b&gt;&lt;br&gt;(AI Agent)&lt;br&gt;調査計画" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="main-group" vertex="1">
+                    <mxGeometry x="420" y="50" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-edit1" value="&lt;b&gt;回答の出力&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="main-group" vertex="1">
+                    <mxGeometry x="730" y="50" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-delete-db" value="&lt;b&gt;共有メモリ削除&lt;/b&gt;&lt;br&gt;(DataTable: delete)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" parent="main-group" vertex="1">
+                    <mxGeometry x="730" y="120" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6c8ebf;strokeWidth=2;" parent="main-group" source="main-chat-trigger" target="main-create-db" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6c8ebf;strokeWidth=2;" parent="main-group" source="main-create-db" target="main-orchestrator" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6c8ebf;strokeWidth=2;" parent="main-group" source="main-orchestrator" target="main-edit1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6c8ebf;strokeWidth=2;" parent="main-group" source="main-orchestrator" target="main-delete-db" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;b&gt;検索トピックの生成&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;・目的&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;・検索ワード候補&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="main-group">
+                    <mxGeometry x="360" y="130" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;b&gt;調査結果の統合&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;・各トピックに対する&lt;br&gt;調査結果と文献&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="main-group">
+                    <mxGeometry x="530" y="130" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="tool-link-manager" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;dashed=1;dashPattern=8 4;fontColor=#d6b656;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.375;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="main-orchestrator" target="manager-group" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="528" y="340"/>
+                            <mxPoint x="290" y="340"/>
+                        </Array>
+                        <mxPoint x="340" y="410" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="3" value="Activate Trigger" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#D4B265;" vertex="1" connectable="0" parent="tool-link-manager">
+                    <mxGeometry x="-0.1851" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="manager-group" value="並行調査マネージャー" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;arcSize=8;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="420" width="500" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="mgr-trigger" value="&lt;b style=&quot;font-size: 11px;&quot;&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;トリガー&lt;/font&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="manager-group" vertex="1">
+                    <mxGeometry x="20" y="50" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="mgr-code" value="&lt;b&gt;サブエージェントマネージャー&lt;/b&gt;&lt;br&gt;(Code Node)&lt;br&gt;Promise.all で並列実行&lt;br&gt;Webhook → search_agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="manager-group" vertex="1">
+                    <mxGeometry x="280" y="55" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="mgr-e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d79b00;strokeWidth=2;" parent="manager-group" source="mgr-trigger" target="mgr-code" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="webhook-link" value="HTTP POST to Webhook" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b85450;strokeWidth=2;dashed=1;dashPattern=8 4;fontSize=10;fontColor=#b85450;labelBackgroundColor=#ffffff;" parent="1" source="mgr-code" target="agent-group" edge="1">
+                    <mxGeometry x="0.0074" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="415" y="660"/>
+                            <mxPoint x="415" y="660"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="agent-group" value="検索エージェント" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;arcSize=8;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="680" width="740" height="340" as="geometry">
+                        <mxRectangle x="40" y="680" width="150" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="agent-webhook" value="&lt;b&gt;Webhook&lt;/b&gt;&#10;(POST)" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="20" y="60" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-edit" value="&lt;b&gt;Edit Fields&lt;br&gt;(パラメータ抽出)&lt;br&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="180" y="60" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-core" value="&lt;b&gt;検索エージェント&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(AI Agent)&lt;/span&gt;&lt;br&gt;Gemini / GPT-5-mini" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" parent="agent-group" vertex="1">
+                    <mxGeometry x="330" y="45" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-tool-playwright" value="&lt;b&gt;Playwright_MCP&lt;/b&gt;&#10;(Browser interaction)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="160" y="250" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-tool-github" value="&lt;b&gt;GitHub_MCP&lt;/b&gt;&#10;(Code / Repo search)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="160" y="160" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-success" value="&lt;b&gt;succes&lt;/b&gt;&lt;br&gt;(DataTable: update)&lt;br&gt;status=success" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="590" y="57.5" width="130" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;" parent="agent-group" source="agent-webhook" target="agent-edit" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;" parent="agent-group" source="agent-edit" target="agent-core" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=1;dashed=1;" parent="agent-group" target="agent-core" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="420" y="170" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="agent-t1" value="tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=1;dashed=1;fontSize=9;fontColor=#d6b656;" parent="agent-group" source="agent-tool-search" target="agent-core" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-t2" value="tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=1;dashed=1;fontSize=9;fontColor=#d6b656;" parent="agent-group" source="agent-tool-jina" target="agent-core" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-t3" value="tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1;dashed=1;fontSize=9;fontColor=#9673a6;" parent="agent-group" source="agent-tool-playwright" target="agent-core" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-t4" value="tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1;dashed=1;fontSize=9;fontColor=#9673a6;" parent="agent-group" source="agent-tool-github" target="agent-core" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-e5" value="success" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;fontSize=9;fontColor=#82b366;" parent="agent-group" source="agent-core" target="agent-success" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-tool-search" value="&lt;b&gt;Web_Search_Tool&lt;/b&gt;&#10;→ searxng_search WF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="520" y="160" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-tool-jina" value="&lt;b&gt;JINA API呼び出し&lt;/b&gt;&lt;br&gt;→ JINA_API_with_shared_DB WF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="agent-group" vertex="1">
+                    <mxGeometry x="520" y="240" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="searxng-group" value="searxng_search" style="swimlane;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;arcSize=8;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="590" width="460" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="sx-trigger" value="&lt;b&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;トリガー&lt;/font&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" parent="searxng-group" vertex="1">
+                    <mxGeometry x="24" y="45" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="sx-http" value="&lt;b&gt;SearXNG_search&lt;/b&gt;&#10;(HTTP Request)&#10;searxng:8080/search" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" parent="searxng-group" vertex="1">
+                    <mxGeometry x="164" y="50" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sx-md" value="&lt;b&gt;結果をmarkdown&lt;br&gt;&lt;/b&gt;に整形&lt;br&gt;(Code)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=9;" parent="searxng-group" vertex="1">
+                    <mxGeometry x="304" y="50" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sx-e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;" parent="searxng-group" source="sx-trigger" target="sx-http" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="sx-e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;" parent="searxng-group" source="sx-http" target="sx-md" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-group" value="JINA_API_with_shared_DB" style="swimlane;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;arcSize=8;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="810" width="460" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-trigger" value="&lt;b&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;トリガー&lt;/font&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" parent="jina-group" vertex="1">
+                    <mxGeometry x="10" y="75" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-not-exist" value="&lt;b&gt;If row does &lt;br&gt;not exist&lt;/b&gt;&lt;br&gt;調査されていないURL" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=9;" parent="jina-group" vertex="1">
+                    <mxGeometry x="180" y="87.5" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-insert" value="&lt;b&gt;Insert row&lt;/b&gt;&lt;br&gt;&lt;b&gt;(共有メモリ更新)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" parent="jina-group" vertex="1">
+                    <mxGeometry x="350" y="110" width="90" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-http" value="&lt;b&gt;HTTP Request&lt;/b&gt;&#10;r.jina.ai" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" parent="jina-group" vertex="1">
+                    <mxGeometry x="345" y="165" width="100" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-exist" value="&lt;b&gt;If row exists&lt;/b&gt;&lt;br&gt;調査済みのURL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" parent="jina-group" vertex="1">
+                    <mxGeometry x="190" y="35" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=2;" parent="jina-group" source="jina-trigger" target="jina-not-exist" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-e1b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1;dashed=1;" parent="jina-group" source="jina-trigger" target="jina-exist" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;" parent="jina-group" source="jina-not-exist" target="jina-insert" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="jina-e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;" parent="jina-group" source="jina-insert" target="jina-http" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="link-to-searxng" value="Sub-workflow call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;dashed=1;dashPattern=5 3;fontSize=9;fontColor=#d6b656;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="agent-tool-search" target="searxng-group" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="740" y="865"/>
+                            <mxPoint x="740" y="800"/>
+                            <mxPoint x="1090" y="800"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="link-to-jina" value="Sub-workflow call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=2;dashed=1;dashPattern=5 3;fontSize=9;fontColor=#9673a6;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="agent-tool-jina" target="jina-group" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;dashed=1;dashPattern=8 4;fontColor=#d6b656;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fillColor=#d5e8d4;" edge="1" parent="1" source="agent-group" target="manager-group">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="595" y="510"/>
+                        </Array>
+                        <mxPoint x="537.5" y="220" as="sourcePoint"/>
+                        <mxPoint x="300" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="7" value="調査結果報告" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#009900;" vertex="1" connectable="0" parent="6">
+                    <mxGeometry x="-0.1851" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;dashed=1;dashPattern=8 4;fontColor=#d6b656;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.625;entryY=1;entryDx=0;entryDy=0;fillColor=#d5e8d4;" edge="1" parent="1" source="manager-group" target="main-orchestrator">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="573" y="465"/>
+                        </Array>
+                        <mxPoint x="675" y="520" as="sourcePoint"/>
+                        <mxPoint x="620" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" value="調査結果報告" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=11;fontColor=#009900;" vertex="1" connectable="0" parent="9">
+                    <mxGeometry x="-0.1851" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
